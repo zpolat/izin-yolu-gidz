@@ -212,10 +212,40 @@ function currentGate() {
 
 /* ---------- HLS-streams ---------- */
 
+function stopWatchdog(video) {
+  if (video && video._wd) { clearInterval(video._wd); video._wd = null; }
+}
+
 function destroyHls(video) {
   if (!video) return;
+  stopWatchdog(video);
   if (video._hls) { try { video._hls.destroy(); } catch (e) {} video._hls = null; }
   try { video.pause(); } catch (e) {}
+}
+
+// Duwt een vastgelopen live-video terug naar de live-rand en hervat afspelen.
+function nudgeLive(video) {
+  try {
+    const b = video.buffered;
+    if (b && b.length) {
+      const end = b.end(b.length - 1);
+      if (end - video.currentTime > 4) video.currentTime = end - 0.5;
+    }
+    if (video.paused) video.play().catch(() => {});
+  } catch (e) { /* ignore */ }
+}
+
+// Controleert elke paar seconden of de video nog vooruit loopt; zo niet -> herstel.
+function startWatchdog(video) {
+  stopWatchdog(video);
+  video._lastT = -1;
+  video._wd = setInterval(() => {
+    if (!video._hls && !video.src) return;
+    const stuck = video.currentTime === video._lastT;
+    video._lastT = video.currentTime;
+    if (video.paused) { video.play().catch(() => {}); return; }
+    if (stuck) nudgeLive(video);
+  }, 4000);
 }
 
 // Koppelt een videostream aan een <video>; probeert de fallback-URL's op volgorde.
@@ -224,19 +254,27 @@ function attachStream(video, cam, cb) {
   destroyHls(video);
   const urls = cam.hls;
   let idx = 0;
+  let recoveries = 0;
 
   function tryUrl() {
     const url = urls[idx];
     if (!url) { cb(false); return; }
 
     if (window.Hls && window.Hls.isSupported()) {
-      const hls = new Hls({ maxBufferLength: 12, liveSyncDurationCount: 3, backBufferLength: 10 });
+      const hls = new Hls({ maxBufferLength: 20, liveSyncDurationCount: 3, backBufferLength: 10 });
       video._hls = hls;
       hls.loadSource(url);
       hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => { cb(true); video.play().catch(() => {}); });
+      hls.on(Hls.Events.MANIFEST_PARSED, () => { cb(true); video.play().catch(() => {}); startWatchdog(video); });
       hls.on(Hls.Events.ERROR, (evt, data) => {
-        if (!data || !data.fatal) return;
+        if (!data) return;
+        if (!data.fatal) {
+          if (data.details === 'bufferStalledError') nudgeLive(video);
+          return;
+        }
+        // Fatale fout: eerst proberen te herstellen (max 2x), anders fallback-URL.
+        if (recoveries < 2 && data.type === 'networkError') { recoveries += 1; try { hls.startLoad(); return; } catch (e) {} }
+        if (recoveries < 2 && data.type === 'mediaError') { recoveries += 1; try { hls.recoverMediaError(); return; } catch (e) {} }
         destroyHls(video);
         idx += 1;
         (idx < urls.length) ? tryUrl() : cb(false);
@@ -244,7 +282,7 @@ function attachStream(video, cam, cb) {
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       // Safari / iOS speelt HLS zelf af.
       video.src = url;
-      video.onloadeddata = () => cb(true);
+      video.onloadeddata = () => { cb(true); startWatchdog(video); };
       video.onerror = () => { idx += 1; (idx < urls.length) ? tryUrl() : cb(false); };
       video.play().catch(() => {});
     } else {
