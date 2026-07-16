@@ -19,7 +19,10 @@ const GATES = [
 ];
 
 function grabImg(src) {
-  return fetch(`https://wsrv.nl/?url=${src}&w=640&output=jpg`).then(async (r) => {
+  // Cache-buster (%3F_%3D=ts) op de bron zodat wsrv én de origin een VERS beeld
+  // geven — anders levert wsrv elk uur dezelfde gecachete foto.
+  const url = `https://wsrv.nl/?url=${src}%3F_%3D${Date.now()}&w=640&output=jpg`;
+  return fetch(url).then(async (r) => {
     if (!r.ok) throw new Error('img ' + r.status);
     return Buffer.from(await r.arrayBuffer());
   });

@@ -239,12 +239,25 @@ function nudgeLive(video) {
 function startWatchdog(video) {
   stopWatchdog(video);
   video._lastT = -1;
+  video._stuck = 0;
   video._wd = setInterval(() => {
     if (!video._hls && !video.src) return;
-    const stuck = video.currentTime === video._lastT;
+    const advancing = video.currentTime !== video._lastT;
     video._lastT = video.currentTime;
     if (video.paused) { video.play().catch(() => {}); return; }
-    if (stuck) nudgeLive(video);
+    if (advancing) { video._stuck = 0; return; }
+    video._stuck += 1;
+    if (video._stuck < 3) { nudgeLive(video); return; }
+    // Langdurig vast: stream opnieuw opzetten (pakt een vers venster als de bron
+    // weer loopt). Hooguit 1x per 30s, tegen dataverspilling bij dode bron.
+    const now = Date.now();
+    if (video._cam && now - (video._lastReattach || 0) > 30000) {
+      video._lastReattach = now;
+      video._stuck = 0;
+      attachStream(video, video._cam, () => {});
+    } else {
+      nudgeLive(video);
+    }
   }, 4000);
 }
 
@@ -252,6 +265,7 @@ function startWatchdog(video) {
 // cb(true) = speelt, cb(false) = mislukt.
 function attachStream(video, cam, cb) {
   destroyHls(video);
+  video._cam = cam;
   const urls = cam.hls;
   let idx = 0;
   let recoveries = 0;

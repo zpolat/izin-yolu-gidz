@@ -2,7 +2,7 @@
  * installeerbaar is en snel opent. Camerabeelden worden NOOIT gecachet
  * (die moeten altijd vers zijn). */
 
-const SHELL = 'kapikule-shell-v21';
+const SHELL = 'kapikule-shell-v22';
 const ASSETS = [
   '.',
   'index.html',
