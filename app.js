@@ -182,6 +182,8 @@ const store = {
   set mode(v) { localStorage.setItem('mode', v); },
   get night() { return localStorage.getItem('night') === '1'; },
   set night(v) { localStorage.setItem('night', v ? '1' : '0'); },
+  get histGate() { return localStorage.getItem('histGate') || ''; },
+  set histGate(v) { localStorage.setItem('histGate', v); },
   get interval() {
     const v = localStorage.getItem('interval');
     return v === null ? 20 : parseInt(v, 10);
@@ -502,7 +504,6 @@ const HGATES = [
 
 let historyIndex = null;
 let historyLoadedAt = 0;
-let histGate = null;
 let histDay = null;
 
 function localParts(ts, tz) {
@@ -535,11 +536,13 @@ async function renderHistory() {
     els.historyView.innerHTML = '<div class="hist-msg">Henüz kayıtlı görüntü yok.<br>Sistem her saat kare biriktirir; birkaç saat sonra burada belirir.</div>';
     return;
   }
-  if (!histGate || !avail.some((g) => g.id === histGate)) histGate = avail[0].id;
-  const gate = HGATES.find((g) => g.id === histGate);
+  let sel = store.histGate;
+  if (!sel || !avail.some((g) => g.id === sel)) sel = avail[0].id;
+  store.histGate = sel;
+  const gate = HGATES.find((g) => g.id === sel);
 
   // Groepeer entries per lokale dag.
-  const entries = gates[histGate].slice().sort((a, b) => a.ts - b.ts);
+  const entries = gates[sel].slice().sort((a, b) => a.ts - b.ts);
   const byDay = {};
   const days = [];
   for (const e of entries) {
@@ -551,7 +554,7 @@ async function renderHistory() {
   if (!histDay || !byDay[histDay]) histDay = days[0].key;
 
   els.historyView.innerHTML = `
-    <div class="hist-row">${avail.map((g) => `<button class="hpill${g.id === histGate ? ' on' : ''}" data-g="${g.id}">${FLAGS[g.id] || ''} ${g.name}</button>`).join('')}</div>
+    <div class="hist-row">${avail.map((g) => `<button class="hpill${g.id === sel ? ' on' : ''}" data-g="${g.id}">${FLAGS[g.id] || ''} ${g.name}</button>`).join('')}</div>
     <div class="hist-row">${days.map((d) => `<button class="hpill${d.key === histDay ? ' on' : ''}" data-d="${d.key}">${d.label}</button>`).join('')}</div>
     <div class="hist-grid">${byDay[histDay].items.map((it) => `
       <button class="hist-cell" data-url="${it.url}" data-h="${it.hour}">
@@ -559,7 +562,7 @@ async function renderHistory() {
         <span class="hc-hour">${it.hour}</span>
       </button>`).join('')}</div>`;
 
-  els.historyView.querySelectorAll('[data-g]').forEach((b) => b.addEventListener('click', () => { histGate = b.dataset.g; histDay = null; renderHistory(); }));
+  els.historyView.querySelectorAll('[data-g]').forEach((b) => b.addEventListener('click', () => { store.histGate = b.dataset.g; histDay = null; renderHistory(); }));
   els.historyView.querySelectorAll('[data-d]').forEach((b) => b.addEventListener('click', () => { histDay = b.dataset.d; renderHistory(); }));
   els.historyView.querySelectorAll('.hist-cell').forEach((b) => b.addEventListener('click', () => openHistoryImage(b.dataset.url, `${gate.name} · ${b.dataset.h}`, byDay[histDay].label)));
 }
