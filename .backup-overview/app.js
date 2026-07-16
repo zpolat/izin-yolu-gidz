@@ -162,10 +162,8 @@ const els = {
   intervalRow: $('#intervalRow'),
   dataNote: $('#dataNote'),
   navLive: $('#navLive'),
-  navOverview: $('#navOverview'),
   navHistory: $('#navHistory'),
   navInfo: $('#navInfo'),
-  overviewView: $('#overviewView'),
   historyView: $('#historyView'),
   viewer: $('#viewer'),
   viewerImg: $('#viewerImg'),
@@ -493,47 +491,6 @@ function renderInfo() {
     `<p class="info-disclaimer">Bilgiler resmi kaynaklardan derlenmiştir (Temmuz 2026) ancak değişebilir. Şüphede resmi siteyi/numarayı kullanın.</p>`;
 }
 
-/* ---------- Özet / Genel bakış (overview) ---------- */
-
-async function renderOverview() {
-  // Voor video-gates gebruiken we de laatst vastgelegde frame uit de history-index.
-  if (!historyIndex) {
-    try {
-      const r = await fetch(`${HISTORY_BASE}/history/index.json?t=${Date.now()}`);
-      if (r.ok) historyIndex = await r.json();
-    } catch { /* geen frames = placeholder */ }
-  }
-  if (store.mode !== 'overview') return;
-
-  const hgates = (historyIndex && historyIndex.gates) || {};
-  const cards = GATES.map((gate) => {
-    if (gateIsInfo(gate)) {
-      return `<button class="ov-card" data-gate="${gate.id}">
-        <div class="ov-thumb"><div class="ov-noimg">🛂</div></div>
-        <div class="ov-cap">${gateFlag(gate)} ${gate.name}</div></button>`;
-    }
-    const cam0 = gate.cams[0];
-    let thumb; let badge;
-    if (isHls(cam0)) {
-      const list = hgates[gate.id] || [];
-      const last = list.length ? list[list.length - 1].url : null;
-      thumb = last ? `<img src="${last}" loading="lazy" alt="" />` : `<div class="ov-noimg">🎥</div>`;
-      badge = last ? '~son kare' : 'canlı';
-    } else {
-      thumb = `<img src="${camUrl(cam0.file)}&w=400" loading="lazy" referrerpolicy="no-referrer" alt="" />`;
-      badge = 'canlı';
-    }
-    return `<button class="ov-card" data-gate="${gate.id}">
-      <div class="ov-thumb">${thumb}<span class="ov-type">${badge}</span></div>
-      <div class="ov-cap">${gateFlag(gate)} ${gate.name}</div></button>`;
-  }).join('');
-
-  els.overviewView.innerHTML = `<div class="ov-grid">${cards}</div>`;
-  els.overviewView.querySelectorAll('[data-gate]').forEach((b) => {
-    b.addEventListener('click', () => { store.gate = b.dataset.gate; setMode('live'); });
-  });
-}
-
 /* ---------- Geçmiş (history) ---------- */
 
 const HISTORY_BASE = 'https://kaimajvv9hct8hsj.public.blob.vercel-storage.com';
@@ -628,7 +585,6 @@ function openHistoryImage(url, title, sub) {
 function setMode(mode) {
   store.mode = mode;
   const live = mode === 'live';
-  const overview = mode === 'overview';
   const history = mode === 'history';
   const info = mode === 'info';
 
@@ -637,11 +593,9 @@ function setMode(mode) {
   els.grid.hidden = !live;
   els.footer.hidden = !live;
   els.refresh.style.display = live ? '' : 'none';
-  els.overviewView.hidden = !overview;
   els.infoView.hidden = !info;
   els.historyView.hidden = !history;
   els.navLive.setAttribute('aria-selected', String(live));
-  els.navOverview.setAttribute('aria-selected', String(overview));
   els.navHistory.setAttribute('aria-selected', String(history));
   els.navInfo.setAttribute('aria-selected', String(info));
 
@@ -656,10 +610,7 @@ function setMode(mode) {
   cleanupGrid();
   window.scrollTo(0, 0);
 
-  if (overview) {
-    els.status.textContent = 'Genel bakış · tüm kapılar';
-    renderOverview();
-  } else if (history) {
+  if (history) {
     els.status.textContent = 'Geçmiş · saatlik kareler';
     renderHistory();
   } else {
@@ -819,7 +770,6 @@ function init() {
   els.nightBtn.addEventListener('click', () => { store.night = !store.night; applyNight(); });
   applyNight();
   els.navLive.addEventListener('click', () => setMode('live'));
-  els.navOverview.addEventListener('click', () => setMode('overview'));
   els.navHistory.addEventListener('click', () => setMode('history'));
   els.navInfo.addEventListener('click', () => setMode('info'));
   els.viewerShare.addEventListener('click', () => {
