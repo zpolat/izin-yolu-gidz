@@ -1,0 +1,8 @@
+.env.local
+.env*
+capture
+node_modules
+.github
+.backup-redesign
+.backup-weather
+.backup-night

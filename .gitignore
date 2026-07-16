@@ -1,0 +1,9 @@
+.vercel
+.env*
+node_modules/
+.backup-redesign/
+.backup-weather/
+.backup-night/
+*.zip
+ffmpeg
+.DS_Store

@@ -1,0 +1,108 @@
+/* İzin Yolu Live — "Bilgi" sekmesi verileri (Türkçe).
+ * Tüm numaralar resmi kaynaklardan (otomobil kulüpleri, ASFINAG/vinyet siteleri,
+ * T.C. Dışişleri temsilcilikleri, gümrük) doğrulanmıştır — Temmuz 2026.
+ * Satır biçimi: [etiket, değer, tür?]  tür: 'tel' | 'web' (yoksa düz metin). */
+
+window.INFO = [
+  {
+    id: 'acil',
+    icon: '🚨',
+    title: 'Acil Numaralar',
+    intro: '112 numarası tüm AB ülkelerinde, Sırbistan, Kuzey Makedonya ve Türkiye’de ücretsiz geçerlidir.',
+    groups: [
+      { name: 'Almanya', rows: [['Genel (ambulans/itfaiye)', '112', 'tel'], ['Polis', '110', 'tel']] },
+      { name: 'Avusturya', rows: [['Genel', '112', 'tel'], ['Polis', '133', 'tel'], ['Ambulans', '144', 'tel'], ['İtfaiye', '122', 'tel']] },
+      { name: 'Macaristan', rows: [['Genel', '112', 'tel'], ['Polis', '107', 'tel'], ['Ambulans', '104', 'tel'], ['İtfaiye', '105', 'tel']] },
+      { name: 'Hırvatistan', rows: [['Genel', '112', 'tel']] },
+      { name: 'Sırbistan', rows: [['Genel', '112', 'tel'], ['Polis', '192', 'tel'], ['İtfaiye', '193', 'tel'], ['Ambulans', '194', 'tel']] },
+      { name: 'Bulgaristan', rows: [['Genel', '112', 'tel'], ['Ambulans', '150', 'tel'], ['Polis', '166', 'tel'], ['İtfaiye', '160', 'tel']] },
+      { name: 'Kuzey Makedonya', rows: [['Genel', '112', 'tel'], ['Polis', '192', 'tel'], ['İtfaiye', '193', 'tel'], ['Ambulans', '194', 'tel']] },
+      { name: 'Türkiye', rows: [['Tüm acil durumlar', '112', 'tel']] },
+    ],
+  },
+  {
+    id: 'yardim',
+    icon: '🔧',
+    title: 'Yol Yardım (Arıza)',
+    intro: 'Arıza veya kazada ülkenin otomobil kulübü. Yurt dışından ararken tam numarayı kullanın.',
+    groups: [
+      { name: 'Hollanda — ANWB', rows: [['Hollanda içi', '088 269 2888', 'tel'], ['Yurt dışı alarm merkezi', '+31 70 314 14 14', 'tel'], ['Web', 'anwb.nl', 'web']] },
+      { name: 'Almanya — ADAC', rows: [['Cepten (Almanya)', '22 22 22', 'tel'], ['Yurt dışından', '+49 89 22 22 22 22', 'tel'], ['Web', 'adac.de', 'web']] },
+      { name: 'Avusturya — ÖAMTC', rows: [['Arıza', '120', 'tel'], ['Yurt dışından', '+43 1 25 120 00', 'tel'], ['Web', 'oeamtc.at', 'web']] },
+      { name: 'Macaristan — Magyar Autóklub', rows: [['Ülke içi', '188', 'tel'], ['Yurt dışından', '+36 1 345 1744', 'tel'], ['Web', 'autoklub.hu', 'web']] },
+      { name: 'Hırvatistan — HAK', rows: [['Arıza', '1987', 'tel'], ['Yurt dışından', '+385 1 1987', 'tel'], ['Web', 'hak.hr', 'web']] },
+      { name: 'Sırbistan — AMSS', rows: [['Arıza', '1987', 'tel'], ['Yurt dışından', '+381 11 1987', 'tel'], ['Web', 'amss.org.rs', 'web']] },
+      { name: 'Bulgaristan — SBA', rows: [['Arıza', '146', 'tel'], ['Yurt dışından', '+359 2 911 46', 'tel'], ['Web', 'sba.bg', 'web']] },
+      { name: 'Kuzey Makedonya — AMSM', rows: [['Arıza', '196', 'tel'], ['Web', 'amsm.mk', 'web']] },
+      { name: 'Türkiye', rows: [['Acil', '112', 'tel']], note: 'Türkiye’de genel bir kulüp yol yardımı yoktur; yol yardımı çoğunlukla sigortanız (kasko/trafik) üzerinden sağlanır. Poliçenizdeki numarayı yanınızda bulundurun.' },
+    ],
+  },
+  {
+    id: 'vinyet',
+    icon: '🎫',
+    title: 'Vinyet & Geçiş Ücreti',
+    intro: 'Rota üzerindeki otoyol ücreti sistemleri farklıdır. Mümkünse sınırı geçmeden temin edin.',
+    groups: [
+      { name: 'Almanya', rows: [['Sistem', 'Binek araç için vinyet YOK']] },
+      { name: 'Avusturya', rows: [['Sistem', 'Dijital vinyet (zorunlu)'], ['Süreler', '1 gün / 10 gün / 2 ay / yıllık'], ['Satın al', 'shop.asfinag.at', 'web']] },
+      { name: 'Macaristan', rows: [['Sistem', 'e-Matrica (e-vinyet, zorunlu)'], ['Süreler', '10 günlük / haftalık'], ['Satın al', 'motorway.hu', 'web']] },
+      { name: 'Sırbistan', rows: [['Sistem', 'Vinyet yok — tol kapılarında ödeme'], ['Ödeme', 'Nakit / kart / DKV']] },
+      { name: 'Bulgaristan', rows: [['Sistem', 'e-Vinyet (zorunlu)'], ['Süreler', 'hafta sonu / haftalık / aylık'], ['Satın al', 'bgtoll.bg', 'web']] },
+      { name: 'Kuzey Makedonya', rows: [['Sistem', 'Tol kapılarında ödeme (nakit/kart)']] },
+      { name: 'Türkiye', rows: [['Sistem', 'HGS (elektronik, zorunlu)'], ['Nasıl', 'PTT veya sınırdan HGS etiketi; otoyol/köprülerde nakit alınmaz'], ['Bilgi', 'hgs.gov.tr', 'web']] },
+    ],
+  },
+  {
+    id: 'sinir',
+    icon: '🛂',
+    title: 'Sınır Kapıları',
+    intro: 'Rota üzerindeki ana kapılar (hepsi 24 saat açık).',
+    groups: [
+      { name: 'Batrovci (Hırvatistan ↔ Sırbistan)', rows: [['Çalışma', '24 saat'], ['Canlı durum', 'amss.org.rs', 'web']] },
+      { name: 'Gradina (Sırbistan ↔ Bulgaristan)', rows: [['Çalışma', '24 saat'], ['AMSS sınır bilgi', '+381 10 361 194', 'tel'], ['Canlı durum', 'amss.org.rs', 'web']] },
+      { name: 'Kapıkule (Bulgaristan ↔ Türkiye)', rows: [['Çalışma', '24 saat'], ['Gümrük Müdürlüğü', '+90 284 215 21 65', 'tel'], ['Gümrük Muhafaza (Edirne)', '+90 284 215 21 73', 'tel'], ['Yoğunluk', 'trakya.ticaret.gov.tr', 'web']] },
+    ],
+  },
+  {
+    id: 'belgeler',
+    icon: '📄',
+    title: 'Belgeler (Kontrol Listesi)',
+    items: [
+      'Geçerli pasaport / kimlik',
+      'Sürücü belgesi (ehliyet)',
+      'Araç ruhsatı',
+      'Yeşil kart (uluslararası sigorta) — Sırbistan, Kuzey Makedonya ve Türkiye’nin üstünün çizili OLMADIĞINDAN emin olun',
+      'Başkasının aracıysa: noter onaylı muvafakatname (kullanım izni)',
+      'Türkiye’ye yabancı plakalı araç: araç pasaportunuza işlenir — süresinde çıkışını yapın, satmayın/bırakmayın',
+      'Yedek ampul, güvenlik yeleği, ikaz üçgeni, ilk yardım çantası (aşağıya bakın)',
+    ],
+  },
+  {
+    id: 'konsolosluk',
+    icon: '🏛️',
+    title: 'Konsolosluklar & Elçilik',
+    intro: 'Hollanda’daki T.C. temsilcilikleri.',
+    groups: [
+      { name: 'Lahey Büyükelçiliği', rows: [['Telefon', '+31 70 302 31 01', 'tel'], ['Acil (mesai dışı)', '+31 6 39 87 25 65', 'tel'], ['Adres', 'Jan Evertstraat 15, Den Haag']] },
+      { name: 'Rotterdam Başkonsolosluğu', rows: [['Telefon', '+31 10 201 20 00', 'tel'], ['Adres', 'Westblaak 2, Rotterdam']] },
+      { name: 'Amsterdam Başkonsolosluğu', rows: [['Telefon', '+31 6 87 24 20 60', 'tel'], ['Adres', 'Museumplein 17, Amsterdam']] },
+      { name: 'Deventer Başkonsolosluğu', rows: [['Telefon', '+31 570 688 650', 'tel'], ['Adres', 'Keizerstraat 8, Deventer']] },
+    ],
+  },
+  {
+    id: 'trafik',
+    icon: '🚗',
+    title: 'Trafik Kuralları',
+    intro: 'Hız (otoyol / şehir dışı / şehir, km/s), alkol sınırı ve zorunlu ekipman.',
+    groups: [
+      { name: 'Almanya', rows: [['Hız', 'otoyol serbest (öneri 130) / 100 / 50'], ['Alkol', '0,5‰ (yeni sürücü 0,0)'], ['Zorunlu', 'üçgen, ilk yardım, yelek (önerilir)']] },
+      { name: 'Avusturya', rows: [['Hız', '130 / 100 / 50'], ['Alkol', '0,5‰ (yeni sürücü 0,1)'], ['Zorunlu', 'üçgen, ilk yardım, yelek; kışın kış lastiği']] },
+      { name: 'Macaristan', rows: [['Hız', '130 / 90 / 50'], ['Alkol', '0,0‰'], ['Zorunlu', 'üçgen, ilk yardım, yelek; şehir dışı gündüz kısa far']] },
+      { name: 'Hırvatistan', rows: [['Hız', '130 / 90 / 50'], ['Alkol', '0,5‰ (<24 yaş 0,0)'], ['Zorunlu', 'üçgen, ilk yardım, yelek, yedek ampul']] },
+      { name: 'Sırbistan', rows: [['Hız', '130 / 100 / 50'], ['Alkol', '0,3‰'], ['Zorunlu', 'üçgen, ilk yardım, yelek, çekme halatı, yedek ampul; gündüz kısa far']] },
+      { name: 'Bulgaristan', rows: [['Hız', '140 / 90 / 50'], ['Alkol', '0,5‰'], ['Zorunlu', 'üçgen, ilk yardım, yelek; yangın söndürücü (önerilir)']] },
+      { name: 'Kuzey Makedonya', rows: [['Hız', '130 / 100 / 50'], ['Alkol', '0,5‰'], ['Zorunlu', 'üçgen, ilk yardım, yelek, yedek ampul']] },
+      { name: 'Türkiye', rows: [['Hız', '120 / 90 / 50'], ['Alkol', '0,5‰ (römork/ticari 0,0)'], ['Zorunlu', '2 üçgen, ilk yardım, yangın söndürücü']] },
+    ],
+  },
+];
