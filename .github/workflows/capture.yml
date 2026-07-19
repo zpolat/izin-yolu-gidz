@@ -2,8 +2,11 @@ name: Saatlik yakalama
 
 on:
   schedule:
-    - cron: '5 * * * *'   # her saatin 5. dakikası (UTC)
-  workflow_dispatch: {}    # elle de tetiklenebilir
+    # GitHub cron onbetrouwbaar (vertraagt/slaat runs over onder belasting).
+    # Daarom elke 20 min i.p.v. 1x/uur -> veel grotere kans dat elk uur gedekt is.
+    # Frames worden per UTC-uur gebucket, dus dit blijft ~1 foto per uur.
+    - cron: '*/20 * * * *'   # elke 20 minuten (UTC)
+  workflow_dispatch: {}      # elle de tetiklenebilir
 
 # Aynı anda tek çalışsın
 concurrency:
