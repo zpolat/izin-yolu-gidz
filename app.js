@@ -603,7 +603,9 @@ const HISTORY_BASE = 'https://kaimajvv9hct8hsj.public.blob.vercel-storage.com';
 // Kapılar die worden vastgelegd (met tijdzone voor lokale uur-weergave).
 const HGATES = [
   { id: 'horgos', name: 'Horgoš', tz: 'Europe/Belgrade' },
+  { id: 'kelebija', name: 'Kelebija', tz: 'Europe/Belgrade' },
   { id: 'batrovci', name: 'Batrovci', tz: 'Europe/Belgrade' },
+  { id: 'ilok', name: 'İlok', tz: 'Europe/Belgrade' },
   { id: 'gradina', name: 'Gradina', tz: 'Europe/Belgrade' },
   { id: 'kapikule', name: 'Kapıkule', tz: 'Europe/Istanbul' },
 ];

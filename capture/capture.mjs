@@ -15,6 +15,7 @@ const GATES = [
   { id: 'horgos',   type: 'hls', src: ['https://kamere.amss.org.rs/horgos1/horgos1.m3u8', 'https://kamere.mup.gov.rs:4443/Horgos/horgos1.m3u8'] },
   { id: 'kelebija', type: 'hls', src: ['https://kamere.mup.gov.rs:4443/Kelebija/kelebija1.m3u8'] },
   { id: 'batrovci', type: 'hls', src: ['https://kamere.amss.org.rs/batrovci1/batrovci1.m3u8', 'https://kamere.mup.gov.rs:4443/Batrovci/batrovci1.m3u8'] },
+  { id: 'ilok',     type: 'img', src: ['www.hak.hr/info/kamere/417.jpg'] },
   { id: 'gradina',  type: 'hls', src: ['https://kamere.amss.org.rs/gradina2/gradina2.m3u8', 'https://kamere.mup.gov.rs:4443/Gradina/gradina2.m3u8'] },
   { id: 'kapikule', type: 'img', src: ['trakya.iscoz.com/kapikule/yolcugiris.jpg'] },
 ];
