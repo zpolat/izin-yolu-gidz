@@ -16,7 +16,7 @@ const PROXY = 'https://wsrv.nl/?url=';
 // Landenvlaggen per grenspost (paar landen die de post verbindt).
 const FLAGS = {
   horgos: '🇭🇺🇷🇸', kelebija: '🇭🇺🇷🇸', nadlac: '🇭🇺🇷🇴',
-  batrovci: '🇭🇷🇷🇸', gradina: '🇷🇸🇧🇬', kapikule: '🇧🇬🇹🇷',
+  batrovci: '🇭🇷🇷🇸', ilok: '🇭🇷🇷🇸', gradina: '🇷🇸🇧🇬', kapikule: '🇧🇬🇹🇷',
   hamzabeyli: '🇧🇬🇹🇷', derekoy: '🇧🇬🇹🇷', ipsala: '🇬🇷🇹🇷', pazarkule: '🇬🇷🇹🇷',
 };
 const gateFlag = (g) => FLAGS[g.id] || '';
@@ -24,7 +24,7 @@ const gateFlag = (g) => FLAGS[g.id] || '';
 // Coördinaten per grenspost (voor het weer via Open-Meteo).
 const COORDS = {
   horgos: [46.16, 19.99], kelebija: [46.15, 19.60], batrovci: [45.05, 19.09],
-  gradina: [43.00, 22.83], kapikule: [41.72, 26.33], hamzabeyli: [41.98, 26.53],
+  ilok: [45.22, 19.38], gradina: [43.00, 22.83], kapikule: [41.72, 26.33], hamzabeyli: [41.98, 26.53],
   derekoy: [41.97, 27.30], nadlac: [46.17, 20.74], ipsala: [40.92, 26.34], pazarkule: [41.68, 26.53],
 };
 
@@ -71,6 +71,15 @@ const GATES = [
     cams: [
       { hls: ['https://kamere.amss.org.rs/batrovci1/batrovci1.m3u8', 'https://kamere.mup.gov.rs:4443/Batrovci/batrovci1.m3u8'], label: 'Giriş (Hırvatistan → Sırbistan)', tr: 'giriş' },
       { hls: ['https://kamere.amss.org.rs/batrovci2/batrovci2.m3u8', 'https://kamere.mup.gov.rs:4443/Batrovci/batrovci2.m3u8'], label: 'Çıkış (Sırbistan → Hırvatistan)', tr: 'çıkış' },
+    ],
+  },
+  {
+    id: 'ilok',
+    name: 'İlok',
+    sub: 'Hırvatistan ↔ Sırbistan',
+    cams: [
+      { src: 'www.hak.hr/info/kamere/417.jpg', label: 'Genel görünüm (HR/SRB)', tr: 'genel' },
+      { src: 'www.hak.hr/info/kamere/418.jpg', label: 'Kamyon & araç şeridi', tr: 'şerit' },
     ],
   },
   {
@@ -200,10 +209,12 @@ let viewerGate = null;
 let viewerTimer = null;
 let toastTimer = null;
 
-function camUrl(file) {
-  // Cache-buster (?_=timestamp) in de bron-URL zodat proxy én browser telkens
-  // een vers beeld ophalen. %3F_%3D = "?_=" ge-encodeerd voor wsrv.nl.
-  return `${PROXY}${ORIGIN}/${file}%3F_%3D${Date.now()}`;
+function camUrl(cam) {
+  // Bron: cam.src (volledig host/pad, bv. HAK) of cam.file (relatief t.o.v.
+  // trakya.iscoz.com). Cache-buster (%3F_%3D) zodat proxy én browser telkens
+  // een vers beeld ophalen.
+  const source = cam.src || `${ORIGIN}/${cam.file}`;
+  return `${PROXY}${source}%3F_%3D${Date.now()}`;
 }
 
 function currentGate() {
@@ -431,7 +442,7 @@ function updateClocks() {
 
 function loadImg(card, cam) {
   setCardState(card, 'loading');
-  $('img', card).src = camUrl(cam.file);
+  $('img', card).src = camUrl(cam);
 }
 
 /* ---------- Verversen (alleen fotocamera's) ---------- */
@@ -492,9 +503,9 @@ function openViewer(gate, cam) {
   if (hls) {
     attachStream(els.viewerVideo, cam, () => {});
   } else {
-    els.viewerImg.src = camUrl(cam.file);
+    els.viewerImg.src = camUrl(cam);
     viewerTimer = setInterval(() => {
-      if (viewerCam) els.viewerImg.src = camUrl(viewerCam.file);
+      if (viewerCam) els.viewerImg.src = camUrl(viewerCam);
     }, Math.max(5, store.interval || 15) * 1000);
   }
 
@@ -572,7 +583,7 @@ async function renderOverview() {
       thumb = last ? `<img src="${last}" loading="lazy" alt="" />` : `<div class="ov-noimg">🎥</div>`;
       badge = last ? '~son kare' : 'canlı';
     } else {
-      thumb = `<img src="${camUrl(cam0.file)}&w=400" loading="lazy" referrerpolicy="no-referrer" alt="" />`;
+      thumb = `<img src="${camUrl(cam0)}&w=400" loading="lazy" referrerpolicy="no-referrer" alt="" />`;
       badge = 'canlı';
     }
     return `<button class="ov-card" data-gate="${gate.id}">
