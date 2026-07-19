@@ -163,6 +163,16 @@ body.night #historyView img { filter: contrast(1.4) brightness(1.05) saturate(1.
   padding: 11px 14px; font-size: 13px; color: var(--muted);
 }
 
+/* Bekleme-süresi link (bv. İlok → HAK) */
+.waitbar { padding: 8px 16px 0; }
+.wait-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 14px; border-radius: 12px;
+  background: var(--card); border: 1px solid var(--line);
+  color: var(--accent); font-size: 14px; font-weight: 600; text-decoration: none;
+}
+.wait-link:active { transform: scale(.98); }
+
 /* Grid */
 .grid {
   display: grid; grid-template-columns: 1fr; gap: 14px;

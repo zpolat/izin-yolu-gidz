@@ -77,6 +77,7 @@ const GATES = [
     id: 'ilok',
     name: 'İlok',
     sub: 'Hırvatistan ↔ Sırbistan',
+    wait: { label: 'Bekleme süresi (HAK)', url: 'https://m.hak.hr/stanje.asp?id=2' },
     cams: [
       { src: 'www.hak.hr/info/kamere/417.jpg', label: 'Genel görünüm (HR/SRB)', tr: 'genel' },
       { src: 'www.hak.hr/info/kamere/418.jpg', label: 'Kamyon & araç şeridi', tr: 'şerit' },
@@ -162,6 +163,7 @@ const els = {
   tabs: $('#tabs'),
   grid: $('#grid'),
   weatherBar: $('#weatherBar'),
+  waitBar: $('#waitBar'),
   infoView: $('#infoView'),
   footer: $('.footer'),
   status: $('#status'),
@@ -348,10 +350,21 @@ function setCardState(card, state) {
   else if (state === 'err') card.classList.add('error');
 }
 
+function renderWaitBar(gate) {
+  if (gate.wait) {
+    els.waitBar.innerHTML = `<a class="wait-link" href="${gate.wait.url}" target="_blank" rel="noopener">🕒 ${gate.wait.label} ↗</a>`;
+    els.waitBar.hidden = false;
+  } else {
+    els.waitBar.innerHTML = '';
+    els.waitBar.hidden = true;
+  }
+}
+
 function renderGrid() {
   const gate = currentGate();
   cleanupGrid();
   loadWeather(gate);
+  renderWaitBar(gate);
   els.grid.innerHTML = '';
 
   // Grenspost zonder camera (bv. Nădlac): toon een kaart met wachttijd-link.
@@ -699,6 +712,7 @@ function setMode(mode) {
 
   els.tabs.hidden = !live;
   els.weatherBar.hidden = !live;
+  els.waitBar.hidden = !live;
   els.grid.hidden = !live;
   els.footer.hidden = !live;
   els.refresh.style.display = live ? '' : 'none';
