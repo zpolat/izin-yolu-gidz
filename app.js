@@ -12,6 +12,7 @@
 
 const ORIGIN = 'trakya.iscoz.com';
 const PROXY = 'https://wsrv.nl/?url=';
+const FEEDBACK_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScqZSC5mihg6C6fUieetEoozlxctt8w7-2Xr99vR7ABYnNxJw/viewform';
 
 // Landenvlaggen per grenspost (paar landen die de post verbindt).
 const FLAGS = {
@@ -607,6 +608,7 @@ function renderInfo() {
       </div>
     </details>`).join('');
   els.infoView.innerHTML = cats +
+    `<a class="info-feedback" href="${FEEDBACK_URL}" target="_blank" rel="noopener">📝 Geri bildirim / öneri gönder</a>` +
     `<p class="info-disclaimer">Bilgiler resmi kaynaklardan derlenmiştir (Temmuz 2026) ancak değişebilir. Şüphede resmi siteyi/numarayı kullanın.</p>`;
 }
 
