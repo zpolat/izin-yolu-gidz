@@ -354,8 +354,9 @@ let waitsData = null;
 let waitsLoadedAt = 0;
 
 function loadWaits() {
-  if (waitsData && Date.now() - waitsLoadedAt < 300000) return;
-  fetch(`${HISTORY_BASE}/history/waits.json?t=${Date.now()}`)
+  if (waitsData && Date.now() - waitsLoadedAt < 60000) return;
+  // Live via onze eigen functie (CDN-cache ~2 min, dus vers én netjes).
+  fetch('/api/waits', { cache: 'no-store' })
     .then((r) => (r.ok ? r.json() : null))
     .then((d) => {
       if (!d) return;
