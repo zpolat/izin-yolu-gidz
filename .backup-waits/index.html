@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>İzin Yolu Gidz — sınır kapıları canlı kamera</title>
+  <meta name="description" content="Türkiye yolundaki sınır kapılarının reklamsız canlı kameraları: Batrovci, Gradina, Kapıkule, Hamzabeyli, Dereköy, İpsala ve Pazarkule." />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="İzin Yolu Gidz" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <div>
+        <h1>İzin Yolu <span>Gidz</span></h1>
+        <p id="status" class="status">Görüntüler yükleniyor…</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="nightBtn" class="icon-btn" title="Gece netleştir" aria-label="Gece netleştir" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button id="refreshBtn" class="icon-btn" title="Şimdi yenile" aria-label="Şimdi yenile">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="modebar" role="tablist" aria-label="Görünüm">
+    <button id="navLive" class="mb-btn" role="tab" aria-selected="true">Canlı</button>
+    <button id="navOverview" class="mb-btn" role="tab" aria-selected="false">Özet</button>
+    <button id="navHistory" class="mb-btn" role="tab" aria-selected="false">Geçmiş</button>
+    <button id="navInfo" class="mb-btn" role="tab" aria-selected="false">Bilgi</button>
+  </nav>
+
+  <nav id="tabs" class="tabs" aria-label="Sınır kapıları"></nav>
+
+  <div id="weatherBar" class="weatherbar" hidden></div>
+
+  <div id="waitBar" class="waitbar" hidden></div>
+
+  <main id="grid" class="grid" aria-live="polite"></main>
+
+  <main id="overviewView" class="overview" hidden></main>
+
+  <main id="infoView" class="info" hidden></main>
+
+  <main id="historyView" class="history" hidden></main>
+
+  <footer class="footer">
+    <div class="row" id="intervalRow">
+      <label for="interval">Yenileme</label>
+      <select id="interval">
+        <option value="10">10 sn'de bir</option>
+        <option value="20" selected>20 sn'de bir</option>
+        <option value="30">30 sn'de bir</option>
+        <option value="60">60 sn'de bir</option>
+        <option value="0">elle</option>
+      </select>
+    </div>
+    <p class="src note" id="dataNote" hidden>📶 Canlı video yayını — foto kameralarına göre daha fazla mobil veri kullanır.</p>
+    <p class="src">Kaynaklar: Türk kapıları T.C. Ticaret Bakanlığı (trakya.ticaret.gov.tr, wsrv.nl görüntü proxy'si üzerinden); Sırp kapıları AMSS / MUP (kamere.amss.org.rs). Reklamsız, takip yok.</p>
+  </footer>
+
+  <!-- Fullscreen viewer -->
+  <div id="viewer" class="viewer" hidden>
+    <button id="viewerClose" class="viewer-close" aria-label="Kapat">✕</button>
+    <button id="viewerShare" class="viewer-share" aria-label="Paylaş">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+      Paylaş
+    </button>
+    <div class="viewer-inner">
+      <img id="viewerImg" alt="" />
+      <video id="viewerVideo" muted playsinline autoplay hidden></video>
+      <div class="viewer-cap">
+        <strong id="viewerTitle"></strong>
+        <span id="viewerSub"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="vendor/hls.light.min.js"></script>
+  <script src="info.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

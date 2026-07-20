@@ -350,53 +350,14 @@ function setCardState(card, state) {
   else if (state === 'err') card.classList.add('error');
 }
 
-let waitsData = null;
-let waitsLoadedAt = 0;
-
-function loadWaits() {
-  if (waitsData && Date.now() - waitsLoadedAt < 300000) return;
-  fetch(`${HISTORY_BASE}/history/waits.json?t=${Date.now()}`)
-    .then((r) => (r.ok ? r.json() : null))
-    .then((d) => {
-      if (!d) return;
-      waitsData = d;
-      waitsLoadedAt = Date.now();
-      if (store.mode === 'live') renderWaitBar(currentGate());
-    })
-    .catch(() => {});
-}
-
-function agoText(sec) {
-  const s = Math.max(0, Math.floor(Date.now() / 1000) - (sec || 0));
-  if (s < 90) return 'az önce';
-  if (s < 3600) return `${Math.round(s / 60)} dk önce`;
-  return `${Math.round(s / 3600)} sa önce`;
-}
-
-// "45 min" -> "45 dk", "6 h" -> "6 sa"
-function trWait(s) { return String(s).replace(/\bmin\b/gi, 'dk').replace(/\bh\b/gi, 'sa'); }
-
 function renderWaitBar(gate) {
-  // 1) Eigen wait-link (İlok → HAK)
   if (gate.wait) {
     els.waitBar.innerHTML = `<a class="wait-link" href="${gate.wait.url}" target="_blank" rel="noopener">🕒 ${gate.wait.label} ↗</a>`;
     els.waitBar.hidden = false;
-    return;
+  } else {
+    els.waitBar.innerHTML = '';
+    els.waitBar.hidden = true;
   }
-  // 2) borderalarm wachttijden (bron + tijd erbij, eerlijk)
-  const w = waitsData && waitsData.gates && waitsData.gates[gate.id];
-  if (w && (w.in || w.out)) {
-    const parts = [];
-    if (w.in) parts.push(`gidiş ~${trWait(w.in)}`);
-    if (w.out) parts.push(`dönüş ~${trWait(w.out)}`);
-    els.waitBar.innerHTML = `<a class="wait-link" href="${w.url}" target="_blank" rel="noopener">`
-      + `<span class="wl-main">🕒 ${parts.join(' · ')}</span>`
-      + `<span class="wl-src">borderalarm (tahmini) · ${agoText(waitsData.updated)} ↗</span></a>`;
-    els.waitBar.hidden = false;
-    return;
-  }
-  els.waitBar.innerHTML = '';
-  els.waitBar.hidden = true;
 }
 
 function renderGrid() {
@@ -404,7 +365,6 @@ function renderGrid() {
   cleanupGrid();
   loadWeather(gate);
   renderWaitBar(gate);
-  loadWaits();
   els.grid.innerHTML = '';
 
   // Grenspost zonder camera (bv. Nădlac): toon een kaart met wachttijd-link.

@@ -35,3 +35,10 @@ jobs:
         env:
           BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
         run: node capture.mjs
+
+      - name: bekleme süreleri (borderalarm)
+        working-directory: capture
+        continue-on-error: true
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+        run: node waits.mjs
