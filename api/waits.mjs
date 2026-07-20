@@ -9,6 +9,8 @@ const GATES = [
   { id: 'batrovci', in: 'bajakovo-batrovci',         out: 'batrovci-bajakovo' },
   { id: 'gradina',  in: 'dragina-kalotina',          out: 'kalotina-dragina' },
   { id: 'kapikule', in: 'kapitan-andreewo-kapikule', out: 'kapikule-kapitan-andreewo' },
+  { id: 'ipsala',   in: 'kipi-ipsala',               out: 'ipsala-kipi' },
+  { id: 'nadlac',   in: 'nagylak-nadlac',            out: 'nadlac-nagylak' },
 ];
 
 async function waitOf(slug) {
