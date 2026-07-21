@@ -1019,20 +1019,6 @@ function init() {
 
 document.addEventListener('DOMContentLoaded', init);
 
-/* ---------- Masaüstü: telefonda aç (QR, sadece geniş ekran, kapatılabilir) ---------- */
-(function desktopHint() {
-  const el = document.getElementById('desktopHint');
-  if (!el) return;
-  const wide = window.matchMedia('(min-width: 1024px)').matches;
-  if (!wide) return;                                          // telefon/tablet: gösterme
-  try { if (localStorage.getItem('desktopHintDismissed') === '1') return; } catch (e) {}
-  el.hidden = false;
-  document.getElementById('desktopHintClose').addEventListener('click', () => {
-    el.hidden = true;
-    try { localStorage.setItem('desktopHintDismissed', '1'); } catch (e) {}
-  });
-})();
-
 /* ---------- "Ana ekrana ekle" ipucu (bir kez, kapatılabilir) ---------- */
 (function installHint() {
   const bar = document.getElementById('installBar');
