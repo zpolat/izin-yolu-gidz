@@ -6,8 +6,8 @@
   --line: #223050;
   --text: #e8eefc;
   --muted: #8ea0c4;
-  --accent: #ff8c42;
-  --accent-dim: #a8500f;
+  --accent: #37d67a;
+  --accent-dim: #1f7a48;
   --danger: #ff6b6b;
   --radius: 16px;
   --safe-t: env(safe-area-inset-top, 0px);
@@ -45,13 +45,13 @@ body { padding-bottom: calc(24px + var(--safe-b)); }
 .status { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
 .dot {
   width: 10px; height: 10px; border-radius: 50%;
-  background: var(--accent); box-shadow: 0 0 0 0 rgba(255,140,66,.6);
+  background: var(--accent); box-shadow: 0 0 0 0 rgba(55,214,122,.6);
   animation: pulse 2s infinite; flex: 0 0 auto;
 }
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255,140,66,.55); }
-  70% { box-shadow: 0 0 0 10px rgba(255,140,66,0); }
-  100% { box-shadow: 0 0 0 0 rgba(255,140,66,0); }
+  0% { box-shadow: 0 0 0 0 rgba(55,214,122,.55); }
+  70% { box-shadow: 0 0 0 10px rgba(55,214,122,0); }
+  100% { box-shadow: 0 0 0 0 rgba(55,214,122,0); }
 }
 .icon-btn {
   flex: 0 0 auto;
@@ -281,7 +281,7 @@ body.night #viewerVideo {
 }
 .live-dot {
   width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
-  box-shadow: 0 0 0 0 rgba(255,140,66,.6); animation: pulse 2s infinite;
+  box-shadow: 0 0 0 0 rgba(55,214,122,.6); animation: pulse 2s infinite;
 }
 .cam-live.live-video .live-dot { background: #ff5a5a; animation: pulse-red 2s infinite; }
 @keyframes pulse-red {

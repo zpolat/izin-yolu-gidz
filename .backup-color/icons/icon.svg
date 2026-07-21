@@ -17,11 +17,11 @@
   </g>
   <!-- camera -->
   <g transform="translate(300 300)">
-    <rect x="0" y="0" width="150" height="92" rx="18" fill="#131d33" stroke="#ff8c42" stroke-width="8"/>
-    <circle cx="60" cy="46" r="30" fill="#0b1220" stroke="#ff8c42" stroke-width="8"/>
-    <circle cx="60" cy="46" r="12" fill="#ff8c42"/>
-    <circle cx="118" cy="26" r="7" fill="#ff8c42"/>
+    <rect x="0" y="0" width="150" height="92" rx="18" fill="#131d33" stroke="#37d67a" stroke-width="8"/>
+    <circle cx="60" cy="46" r="30" fill="#0b1220" stroke="#37d67a" stroke-width="8"/>
+    <circle cx="60" cy="46" r="12" fill="#37d67a"/>
+    <circle cx="118" cy="26" r="7" fill="#37d67a"/>
   </g>
   <!-- live dot -->
-  <circle cx="150" cy="410" r="16" fill="#ff8c42"/>
+  <circle cx="150" cy="410" r="16" fill="#37d67a"/>
 </svg>
