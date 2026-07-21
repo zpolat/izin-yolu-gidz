@@ -887,7 +887,7 @@ async function frameBlob(cam, mediaEl) {
 
 async function shareCam(gate, cam, mediaEl) {
   const url = `${location.origin}${location.pathname}?gate=${gate.id}`;
-  const title = 'İzin Yolu Gidz';
+  const title = 'İzin Yolcusu';
   const text = `${gate.name} sınır kapısı — canlı kamera 👇`;
 
   let file = null;

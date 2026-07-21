@@ -1,4 +1,4 @@
-/* İzin Yolu Gidz — saatlik ekran görüntüsü yakalama.
+/* İzin Yolcusu — saatlik ekran görüntüsü yakalama.
  * GitHub Actions'ta saatlik çalışır: her kapıdan 1 kare alır (foto: wsrv,
  * video: ffmpeg), Vercel Blob'a yükler, index.json'u günceller, eskiyi siler. */
 
