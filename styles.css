@@ -366,6 +366,8 @@ body.night #viewerVideo {
 }
 .viewer-inner [hidden] { display: none; }
 .footer .src.note { color: #ffcf8f; }
+.footer .credit { text-align: center; font-size: 12px; color: var(--muted); margin: 14px 0 0; }
+.footer .credit span { color: var(--accent); font-weight: 700; }
 .viewer-cap { margin-top: 12px; text-align: center; }
 .viewer-cap strong { display: block; font-size: 16px; }
 .viewer-cap span { font-size: 12px; color: var(--muted); }
