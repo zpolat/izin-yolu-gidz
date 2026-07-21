@@ -163,7 +163,6 @@ const $ = (s, r = document) => r.querySelector(s);
 const els = {
   tabs: $('#tabs'),
   grid: $('#grid'),
-  infoStrip: $('#infoStrip'),
   weatherBar: $('#weatherBar'),
   waitBar: $('#waitBar'),
   infoView: $('#infoView'),
@@ -379,18 +378,11 @@ function agoText(sec) {
 // "45 min" -> "45 dk", "6 h" -> "6 sa"
 function trWait(s) { return String(s).replace(/\bmin\b/gi, 'dk').replace(/\bh\b/gi, 'sa'); }
 
-// Toon de strook alleen als weer of wachttijd zichtbaar is (anders geen lege ruimte).
-function syncInfoStrip() {
-  if (!els.infoStrip) return;
-  els.infoStrip.hidden = store.mode !== 'live' || (els.weatherBar.hidden && els.waitBar.hidden);
-}
-
 function renderWaitBar(gate) {
   // 1) Eigen wait-link (İlok → HAK)
   if (gate.wait) {
     els.waitBar.innerHTML = `<a class="wait-link" href="${gate.wait.url}" target="_blank" rel="noopener">🕒 ${gate.wait.label} ↗</a>`;
     els.waitBar.hidden = false;
-    syncInfoStrip();
     return;
   }
   // 2) borderalarm wachttijden (bron + tijd erbij, eerlijk)
@@ -403,12 +395,10 @@ function renderWaitBar(gate) {
       + `<span class="wl-main">🕒 ${parts.join(' · ')}</span>`
       + `<span class="wl-src">borderalarm (tahmini) · ${agoText(waitsData.updated)} ↗</span></a>`;
     els.waitBar.hidden = false;
-    syncInfoStrip();
     return;
   }
   els.waitBar.innerHTML = '';
   els.waitBar.hidden = true;
-  syncInfoStrip();
 }
 
 function renderGrid() {
@@ -766,7 +756,6 @@ function setMode(mode) {
   els.tabs.hidden = !live;
   els.weatherBar.hidden = !live;
   els.waitBar.hidden = !live;
-  els.infoStrip.hidden = !live;
   els.grid.hidden = !live;
   els.footer.hidden = !live;
   els.refresh.style.display = live ? '' : 'none';
@@ -817,9 +806,8 @@ let weatherOpen = false; // 3-daagse uitklap open/dicht
 
 function loadWeather(gate) {
   const c = COORDS[gate.id];
-  if (!c) { els.weatherBar.hidden = true; syncInfoStrip(); return; }
+  if (!c) { els.weatherBar.hidden = true; return; }
   els.weatherBar.hidden = false;
-  syncInfoStrip();
 
   const cached = weatherCache[gate.id];
   if (cached && Date.now() - cached.t < 15 * 60 * 1000) {
