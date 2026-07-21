@@ -210,6 +210,7 @@ let timer = null;
 let lastUpdate = 0;
 let viewerCam = null;
 let viewerGate = null;
+let viewerHistory = null; // {url, title} als er een geschiedenis-foto open staat
 let viewerTimer = null;
 let toastTimer = null;
 
@@ -569,6 +570,7 @@ function tickStatus() {
 function openViewer(gate, cam) {
   viewerCam = cam;
   viewerGate = gate;
+  viewerHistory = null;
   els.viewerTitle.textContent = cam.label;
   els.viewerSub.textContent = `${gate.name} · ${cam.tr}`;
   const hls = isHls(cam);
@@ -592,7 +594,7 @@ function openViewer(gate, cam) {
 function closeViewer() {
   els.viewer.hidden = true;
   document.body.style.overflow = '';
-  viewerCam = null;
+  viewerCam = null; viewerHistory = null;
   if (viewerTimer) { clearInterval(viewerTimer); viewerTimer = null; }
   destroyHls(els.viewerVideo);
   els.viewerVideo.removeAttribute('src');
@@ -772,6 +774,7 @@ async function renderHistory(center) {
 
 function openHistoryImage(url, title, sub) {
   viewerCam = null; viewerGate = null;
+  viewerHistory = { url, title };
   if (viewerTimer) { clearInterval(viewerTimer); viewerTimer = null; }
   destroyHls(els.viewerVideo);
   els.viewerVideo.hidden = true;
@@ -959,6 +962,42 @@ async function shareCam(gate, cam, mediaEl) {
   }
 }
 
+// Geschiedenis-foto delen: blob-URL is publiek → als bestand delen, met sitelink erbij.
+async function shareHistory(item) {
+  const url = `${location.origin}${location.pathname}`;
+  const title = 'İzin Yolcusu';
+  const text = `${item.title} 👇`;
+
+  let file = null;
+  try {
+    const r = await fetch(item.url, { mode: 'cors' });
+    if (r.ok) {
+      const blob = await r.blob();
+      file = new File([blob], 'izinyolcusu.jpg', { type: blob.type || 'image/jpeg' });
+    }
+  } catch (e) { /* beeld kon niet, deel alleen de link */ }
+
+  try {
+    if (navigator.canShare && file && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], text: `${text}\n${url}` });
+      return;
+    }
+    if (navigator.share) {
+      await navigator.share({ title, text, url });
+      return;
+    }
+  } catch (e) {
+    if (e && e.name === 'AbortError') return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(`${text}\n${url}`);
+    toast('Bağlantı kopyalandı 📋');
+  } catch (e) {
+    toast('Paylaşım bu cihazda desteklenmiyor');
+  }
+}
+
 /* ---------- Wiring ---------- */
 
 function init() {
@@ -988,6 +1027,8 @@ function init() {
   els.viewerShare.addEventListener('click', () => {
     if (viewerGate && viewerCam) {
       shareCam(viewerGate, viewerCam, isHls(viewerCam) ? els.viewerVideo : null);
+    } else if (viewerHistory) {
+      shareHistory(viewerHistory);
     }
   });
   els.viewerClose.addEventListener('click', closeViewer);
