@@ -323,14 +323,16 @@ function attachStream(video, cam, cb) {
 
 /* ---------- Rendering ---------- */
 
-function renderTabs() {
+function renderTabs(center) {
   els.tabs.innerHTML = '';
+  let selBtn = null;
   GATES.forEach((g) => {
     const b = document.createElement('button');
     b.className = 'tab';
     b.innerHTML = `<span class="tab-flag">${gateFlag(g)}</span> ${g.name}`;
     b.setAttribute('role', 'tab');
-    b.setAttribute('aria-selected', String(g.id === store.gate));
+    const isSel = g.id === store.gate;
+    b.setAttribute('aria-selected', String(isSel));
     b.addEventListener('click', () => {
       store.gate = g.id;
       renderTabs();
@@ -339,7 +341,16 @@ function renderTabs() {
       tickStatus();
     });
     els.tabs.appendChild(b);
+    if (isSel) selBtn = b;
   });
+  // Bij het laden: scroll de gekozen tab in beeld (anders staat een rechtse
+  // keuze na refresh buiten beeld terwijl je er wél op staat).
+  if (center && selBtn) {
+    requestAnimationFrame(() => {
+      const target = selBtn.offsetLeft - (els.tabs.clientWidth - selBtn.offsetWidth) / 2;
+      els.tabs.scrollTo({ left: Math.max(0, target), behavior: 'auto' });
+    });
+  }
 }
 
 function cleanupGrid() {
@@ -940,7 +951,7 @@ function init() {
     store.mode = 'live';
   }
 
-  renderTabs();
+  renderTabs(true);
 
   els.interval.value = String(store.interval);
   els.interval.addEventListener('change', () => {
