@@ -700,7 +700,17 @@ function localParts(ts, tz) {
   };
 }
 
-async function renderHistory() {
+// Scroll een geselecteerde pill in beeld binnen zijn scrollbare rij (robuust
+// via getBoundingClientRect, onafhankelijk van offsetParent).
+function centerPill(pill) {
+  if (!pill) return;
+  const row = pill.parentElement;
+  const pr = pill.getBoundingClientRect();
+  const rr = row.getBoundingClientRect();
+  row.scrollLeft += (pr.left - rr.left) - (rr.width - pr.width) / 2;
+}
+
+async function renderHistory(center) {
   els.historyView.innerHTML = '<div class="hist-msg">Geçmiş yükleniyor…</div>';
   if (!historyIndex || Date.now() - historyLoadedAt > 120000) {
     try {
@@ -750,6 +760,14 @@ async function renderHistory() {
   els.historyView.querySelectorAll('[data-g]').forEach((b) => b.addEventListener('click', () => { store.histGate = b.dataset.g; histDay = null; renderHistory(); }));
   els.historyView.querySelectorAll('[data-d]').forEach((b) => b.addEventListener('click', () => { histDay = b.dataset.d; renderHistory(); }));
   els.historyView.querySelectorAll('.hist-cell').forEach((b) => b.addEventListener('click', () => openHistoryImage(b.dataset.url, `${gate.name} · ${b.dataset.h}`, byDay[histDay].label)));
+
+  // Bij het openen van Geçmiş: gekozen kapı- en dag-pill in beeld scrollen.
+  if (center) {
+    requestAnimationFrame(() => {
+      centerPill(els.historyView.querySelector('.hist-row .hpill.on[data-g]'));
+      centerPill(els.historyView.querySelector('.hist-row .hpill.on[data-d]'));
+    });
+  }
 }
 
 function openHistoryImage(url, title, sub) {
@@ -805,7 +823,7 @@ function setMode(mode) {
     renderOverview();
   } else if (history) {
     els.status.textContent = 'Geçmiş · saatlik kareler';
-    renderHistory();
+    renderHistory(true);
   } else {
     els.status.textContent = 'Yol bilgileri & numaralar';
     if (!els.infoView._built) { renderInfo(); els.infoView._built = true; }
