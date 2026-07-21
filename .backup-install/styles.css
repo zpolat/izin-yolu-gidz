@@ -368,27 +368,6 @@ body.night #viewerVideo {
 .footer .src.note { color: #ffcf8f; }
 .footer .credit { text-align: center; font-size: 12px; color: var(--muted); margin: 14px 0 0; }
 .footer .credit span { color: var(--accent); font-weight: 700; }
-
-/* Ana ekrana ekle -ipucu (vaste balk onderaan) */
-.installbar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px calc(12px + var(--safe-b));
-  background: var(--card); border-top: 1px solid var(--line);
-  box-shadow: 0 -6px 22px rgba(0,0,0,.4);
-}
-.ib-icon { font-size: 20px; flex: 0 0 auto; }
-.ib-text { flex: 1; min-width: 0; font-size: 13px; color: var(--text); line-height: 1.35; }
-.ib-text b { color: var(--accent); font-weight: 700; }
-.ib-add {
-  flex: 0 0 auto; padding: 9px 16px; border-radius: 10px;
-  background: var(--accent); color: #04110a; font-weight: 700; font-size: 14px; border: 0;
-}
-.ib-add:active { transform: scale(.96); }
-.ib-close {
-  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 8px;
-  background: transparent; color: var(--muted); border: 1px solid var(--line); font-size: 15px;
-}
 .viewer-cap { margin-top: 12px; text-align: center; }
 .viewer-cap strong { display: block; font-size: 16px; }
 .viewer-cap span { font-size: 12px; color: var(--muted); }
